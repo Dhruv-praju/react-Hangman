@@ -8,6 +8,7 @@ import img3 from "./3.jpg";
 import img4 from "./4.jpg";
 import img5 from "./5.jpg";
 import img6 from "./6.jpg";
+import AlphaButtons from "./AlphaButtons";
 
 class Hangman extends Component {
   /** by default, allow 6 guesses and use provided gallows images. */
@@ -43,25 +44,22 @@ class Hangman extends Component {
     }));
   }
 
-  /** generateButtons: return array of letter buttons to render */
-  generateButtons() {
-    return "abcdefghijklmnopqrstuvwxyz".split("").map(ltr => (
-      <button
-        value={ltr}
-        onClick={this.handleGuess}
-        disabled={this.state.guessed.has(ltr)}
-        key={ltr}
-      >
-        {ltr}
-      </button>
-    ));
-  }
   reset=()=>{
     this.setState({ nWrong: 0, guessed: new Set(), answer: randomWord() })
   }
   getWordNbtns(){
+    let testArr = this.state.answer.split('')
+                  .filter(ltr => ! this.state.guessed.has(ltr))
+    const isWinner = !testArr.length
+    const gameOver = this.state.nWrong >= this.props.maxWrong
     let wordNbtns=''
-    if(this.state.nWrong > this.props.maxWrong){  // display 'You lose'
+    if(isWinner){    // display 'You won'
+      wordNbtns = 
+      <div>
+        <h2>You WON</h2>
+      </div>
+    }
+    else if(gameOver){  // display 'You lose'
       wordNbtns = 
       <div>
         <p className='Hangman-word'>{this.state.answer}</p>
@@ -73,7 +71,7 @@ class Hangman extends Component {
       wordNbtns = 
       <div>
         <p className='Hangman-word'>{this.guessedWord()}</p>
-        <p className='Hangman-btns'>{this.generateButtons()}</p>
+        <p className='Hangman-btns'><AlphaButtons handleGuess={this.handleGuess} guessedBtns={this.state.guessed} /></p>
       </div>
     }
     return wordNbtns
