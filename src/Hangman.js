@@ -45,6 +45,7 @@ class Hangman extends Component {
   }
 
   reset=()=>{
+    // chane the state to initial state
     this.setState({ nWrong: 0, guessed: new Set(), answer: randomWord() })
   }
   getWordNbtns(){
